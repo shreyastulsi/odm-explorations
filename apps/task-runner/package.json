@@ -1,0 +1,19 @@
+{
+  "name": "@nigs/task-runner",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "nigs-task-runner": "./dist/index.js"
+  },
+  "dependencies": {
+    "@nigs/browser-playwright": "*",
+    "@nigs/core": "*",
+    "@nigs/desktop-macos": "*",
+    "@nigs/site-pornhub": "*",
+    "@nigs/site-youtube": "*",
+    "openai": "^4.97.0"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "@nigs/mcp-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "nigs-mcp-server": "./dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.0",
+    "@nigs/browser-playwright": "*",
+    "@nigs/core": "*",
+    "@nigs/desktop-macos": "*",
+    "@nigs/site-pornhub": "*",
+    "@nigs/site-youtube": "*"
+  }
+}

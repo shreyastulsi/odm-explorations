@@ -1,0 +1,26 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./packages/core"
+    },
+    {
+      "path": "./packages/browser-playwright"
+    },
+    {
+      "path": "./packages/site-youtube"
+    },
+    {
+      "path": "./packages/site-pornhub"
+    },
+    {
+      "path": "./packages/desktop-macos"
+    },
+    {
+      "path": "./apps/mcp-server"
+    },
+    {
+      "path": "./apps/task-runner"
+    }
+  ]
+}

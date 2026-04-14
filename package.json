@@ -1,0 +1,28 @@
+{
+  "name": "nigs-automation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "find apps packages -name dist -type d -prune -exec rm -rf '{}' + && find apps packages -name '*.tsbuildinfo' -delete",
+    "dev:mcp": "tsx apps/mcp-server/src/index.ts",
+    "dev:runner": "tsx apps/task-runner/src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b --pretty false"
+  },
+  "engines": {
+    "node": ">=18.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.3",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.3"
+  }
+}
