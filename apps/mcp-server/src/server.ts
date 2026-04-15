@@ -10,7 +10,9 @@ import {
   toolResultToText,
   ToolRegistry
 } from "@nigs/core";
+import { createInstagramTools } from "@nigs/site-instagram";
 import { createPornhubTools } from "@nigs/site-pornhub";
+import { createTikTokTools } from "@nigs/site-tiktok";
 import { createYouTubeTools } from "@nigs/site-youtube";
 import { ManualRunManager } from "./manual-run-manager.js";
 
@@ -19,6 +21,8 @@ function buildRegistry(browserManager: BrowserSessionManager): ToolRegistry {
   registry.registerMany(createBrowserTools(browserManager));
   registry.registerMany(createMessagesTools());
   registry.registerMany(createYouTubeTools(browserManager));
+  registry.registerMany(createInstagramTools(browserManager));
+  registry.registerMany(createTikTokTools(browserManager));
   registry.registerMany(createPornhubTools(browserManager));
   registry.registerMany(createArtifactTools());
   return registry;
@@ -176,6 +180,29 @@ export async function startMcpServer(): Promise<void> {
           content: {
             type: "text",
             text: `Launch Chrome, search YouTube for "${args.query}", open the top ${args.limit ?? 3} organic videos, and save each video's extracted text as artifacts.`
+          }
+        }
+      ]
+    })
+  );
+
+  server.registerPrompt(
+    "short-form-personalized-feed",
+    {
+      title: "Short-Form Personalized Feed",
+      description: "Generate a prompt for collecting videos from signed-in YouTube Shorts, Instagram Reels, and TikTok feeds.",
+      argsSchema: {
+        limit: z.number().int().min(1).max(20).optional()
+      }
+    },
+    async (args) => ({
+      description: "Prompt for cross-platform short-form feed collection.",
+      messages: [
+        {
+          role: "user",
+          content: {
+            type: "text",
+            text: `Using my signed-in browser sessions, collect ${args.limit ?? 3} YouTube Shorts, ${args.limit ?? 3} Instagram Reels, and ${args.limit ?? 3} TikToks from my personalized feeds. For each video, record the platform, URL, title or caption, hashtags, creator name or handle if visible, and any visible engagement counts. Save the results as structured artifacts.`
           }
         }
       ]

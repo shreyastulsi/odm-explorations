@@ -12,13 +12,23 @@ export const BrowserToolNames = [
 
 export const YouTubeToolNames = [
   "youtube_search_videos",
-  "youtube_open_result"
+  "youtube_open_result",
+  "youtube_collect_shorts",
+  "youtube_collect_short_transcripts"
 ] as const;
 
 export const PornhubToolNames = [
   "pornhub_accept_age_gate",
   "pornhub_search_videos",
   "pornhub_capture_screenshot"
+] as const;
+
+export const InstagramToolNames = [
+  "instagram_collect_reels"
+] as const;
+
+export const TikTokToolNames = [
+  "tiktok_collect_videos"
 ] as const;
 
 export const MessagesToolNames = [
@@ -35,6 +45,8 @@ export const ToolNames = [
   ...BrowserToolNames,
   ...YouTubeToolNames,
   ...PornhubToolNames,
+  ...InstagramToolNames,
+  ...TikTokToolNames,
   ...MessagesToolNames,
   ...ArtifactToolNames
 ] as const;
@@ -169,6 +181,24 @@ export const YoutubeOpenResultInputSchema = z
     "Provide resultIndex or videoUrl."
   );
 
+export const YoutubeCollectShortsInputSchema = z.object({
+  sessionId: z.string().min(1).optional(),
+  query: z.string().min(1).optional(),
+  limit: z.number().int().min(1).max(50).default(20)
+});
+
+export const YoutubeCollectShortTranscriptsInputSchema = z
+  .object({
+    sessionId: z.string().min(1).optional(),
+    query: z.string().min(1).optional(),
+    shortUrls: z.array(z.string().url()).min(1).max(50).optional(),
+    limit: z.number().int().min(1).max(50).default(20)
+  })
+  .refine(
+    (value) => !(value.query && value.shortUrls),
+    "Provide either query or shortUrls, not both."
+  );
+
 export const PornhubAcceptAgeGateInputSchema = z.object({
   sessionId: z.string().min(1).optional()
 });
@@ -190,6 +220,18 @@ export const PornhubCaptureScreenshotInputSchema = z
     (value) => Boolean(value.resultIndex || value.videoUrl),
     "Provide resultIndex or videoUrl."
   );
+
+export const InstagramCollectReelsInputSchema = z.object({
+  sessionId: z.string().min(1).optional(),
+  query: z.string().min(1).optional(),
+  limit: z.number().int().min(1).max(50).default(20)
+});
+
+export const TikTokCollectVideosInputSchema = z.object({
+  sessionId: z.string().min(1).optional(),
+  query: z.string().min(1).optional(),
+  limit: z.number().int().min(1).max(50).default(20)
+});
 
 export const MessagesOpenAppInputSchema = z.object({});
 
@@ -278,9 +320,13 @@ export type BrowserWaitForInput = z.infer<typeof BrowserWaitForInputSchema>;
 export type BrowserReadPageInput = z.infer<typeof BrowserReadPageInputSchema>;
 export type YoutubeSearchVideosInput = z.infer<typeof YoutubeSearchVideosInputSchema>;
 export type YoutubeOpenResultInput = z.infer<typeof YoutubeOpenResultInputSchema>;
+export type YoutubeCollectShortsInput = z.infer<typeof YoutubeCollectShortsInputSchema>;
+export type YoutubeCollectShortTranscriptsInput = z.infer<typeof YoutubeCollectShortTranscriptsInputSchema>;
 export type PornhubAcceptAgeGateInput = z.infer<typeof PornhubAcceptAgeGateInputSchema>;
 export type PornhubSearchVideosInput = z.infer<typeof PornhubSearchVideosInputSchema>;
 export type PornhubCaptureScreenshotInput = z.infer<typeof PornhubCaptureScreenshotInputSchema>;
+export type InstagramCollectReelsInput = z.infer<typeof InstagramCollectReelsInputSchema>;
+export type TikTokCollectVideosInput = z.infer<typeof TikTokCollectVideosInputSchema>;
 export type MessagesOpenAppInput = z.infer<typeof MessagesOpenAppInputSchema>;
 export type MessagesSendTextInput = z.infer<typeof MessagesSendTextInputSchema>;
 export type ArtifactListInput = z.infer<typeof ArtifactListInputSchema>;

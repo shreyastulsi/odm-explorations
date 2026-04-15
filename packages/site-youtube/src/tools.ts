@@ -1,9 +1,13 @@
 import type {
   ToolDefinition,
+  YoutubeCollectShortTranscriptsInput,
+  YoutubeCollectShortsInput,
   YoutubeOpenResultInput,
   YoutubeSearchVideosInput
 } from "@nigs/core";
 import {
+  YoutubeCollectShortTranscriptsInputSchema,
+  YoutubeCollectShortsInputSchema,
   YoutubeOpenResultInputSchema,
   YoutubeSearchVideosInputSchema
 } from "@nigs/core";
@@ -76,5 +80,74 @@ export function createYouTubeTools(
     }
   };
 
-  return [searchTool, openResultTool];
+  const collectShortsTool: ToolDefinition<YoutubeCollectShortsInput> = {
+    name: "youtube_collect_shorts",
+    title: "Collect YouTube Shorts",
+    description:
+      "Open YouTube Shorts, optionally search for a topic, scroll through Shorts, and record titles, captions, hashtags, creator details, URLs, and visible engagement counts.",
+    inputSchema: YoutubeCollectShortsInputSchema,
+    execute: async (context, input) => {
+      const shorts = await youtubeService.collectShorts(context, {
+        limit: input.limit,
+        ...(input.query ? { query: input.query } : {}),
+        ...(input.sessionId ? { sessionId: input.sessionId } : {})
+      });
+      const artifact = await context.writeArtifact({
+        type: "youtube-shorts",
+        content: {
+          query: input.query ?? null,
+          shorts
+        }
+      });
+      const snapshot = await browserManager.snapshot(context.runId, "youtube-shorts", input.sessionId);
+
+      return {
+        ok: true,
+        data: {
+          query: input.query ?? null,
+          shorts
+        },
+        artifactIds: [artifact.id],
+        ...snapshot
+      };
+    }
+  };
+
+  const collectShortTranscriptsTool: ToolDefinition<YoutubeCollectShortTranscriptsInput> = {
+    name: "youtube_collect_short_transcripts",
+    title: "Collect YouTube Short Transcripts",
+    description:
+      "Open YouTube Shorts from a feed, search, or explicit Shorts URLs and save metadata plus available caption/transcript text and timestamped transcript segments.",
+    inputSchema: YoutubeCollectShortTranscriptsInputSchema,
+    execute: async (context, input) => {
+      const shorts = await youtubeService.collectShortTranscripts(context, {
+        limit: input.limit,
+        ...(input.query ? { query: input.query } : {}),
+        ...(input.shortUrls ? { shortUrls: input.shortUrls } : {}),
+        ...(input.sessionId ? { sessionId: input.sessionId } : {})
+      });
+      const artifact = await context.writeArtifact({
+        type: "youtube-short-transcripts",
+        content: {
+          query: input.query ?? null,
+          shortUrls: input.shortUrls ?? null,
+          shorts
+        }
+      });
+      const snapshot = await browserManager.snapshot(context.runId, "youtube-short-transcripts", input.sessionId);
+
+      return {
+        ok: true,
+        data: {
+          query: input.query ?? null,
+          shortUrls: input.shortUrls ?? null,
+          shorts
+        },
+        artifactIds: [artifact.id],
+        ...snapshot
+      };
+    }
+  };
+
+  return [searchTool, openResultTool, collectShortsTool, collectShortTranscriptsTool];
 }

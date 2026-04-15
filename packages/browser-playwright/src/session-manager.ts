@@ -15,6 +15,10 @@ import type {
 import { createRuntimePaths, ensureRuntimePaths, RuntimePaths } from "@nigs/core";
 import { describeTarget, resolveLocator } from "./locator.js";
 
+type LaunchPersistentContextOptions = NonNullable<
+  Parameters<typeof chromium.launchPersistentContext>[1]
+>;
+
 interface BrowserSession {
   id: string;
   runId: string;
@@ -34,6 +38,14 @@ export interface BrowserPageSnapshot {
   url: string;
   text: string;
   headings: string[];
+}
+
+function isMissingChromeError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return (
+    message.includes("Chromium distribution 'chrome' is not found") ||
+    message.includes("/opt/google/chrome/chrome")
+  );
 }
 
 export class BrowserSessionManager {
@@ -80,8 +92,7 @@ export class BrowserSessionManager {
     const artifactsDir = path.join(this.runtimePaths.artifactsRoot, runId, "browser", sessionId);
     await mkdir(artifactsDir, { recursive: true });
 
-    const context = await chromium.launchPersistentContext(this.runtimePaths.chromeProfileDir, {
-      channel: "chrome",
+    const context = await this.launchPersistentContext({
       headless: input.headless,
       slowMo: input.slowMoMs,
       viewport: input.viewport
@@ -261,6 +272,23 @@ export class BrowserSessionManager {
 
   getPage(sessionId?: string): Page {
     return this.getSession(sessionId).page;
+  }
+
+  private async launchPersistentContext(
+    options: LaunchPersistentContextOptions
+  ): Promise<BrowserContext> {
+    try {
+      return await chromium.launchPersistentContext(this.runtimePaths.chromeProfileDir, {
+        ...options,
+        channel: "chrome"
+      });
+    } catch (error) {
+      if (!isMissingChromeError(error)) {
+        throw error;
+      }
+
+      return chromium.launchPersistentContext(this.runtimePaths.chromeProfileDir, options);
+    }
   }
 
   private getSession(sessionId?: string): BrowserSession {

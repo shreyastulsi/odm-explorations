@@ -12,7 +12,9 @@
     "@nigs/browser-playwright": "*",
     "@nigs/core": "*",
     "@nigs/desktop-macos": "*",
+    "@nigs/site-instagram": "*",
     "@nigs/site-pornhub": "*",
+    "@nigs/site-tiktok": "*",
     "@nigs/site-youtube": "*",
     "openai": "^4.97.0"
   }

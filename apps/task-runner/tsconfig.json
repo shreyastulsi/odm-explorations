@@ -27,6 +27,12 @@
       "path": "../../packages/site-pornhub"
     },
     {
+      "path": "../../packages/site-instagram"
+    },
+    {
+      "path": "../../packages/site-tiktok"
+    },
+    {
       "path": "../../packages/desktop-macos"
     }
   ]
