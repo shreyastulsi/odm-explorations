@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc -b",
     "clean": "find apps packages -name dist -type d -prune -exec rm -rf '{}' + && find apps packages -name '*.tsbuildinfo' -delete",
+    "dev:dashboard": "tsx apps/mcp-dashboard/src/index.ts",
     "dev:mcp": "tsx apps/mcp-server/src/index.ts",
     "dev:runner": "tsx apps/task-runner/src/index.ts",
     "test": "vitest run",

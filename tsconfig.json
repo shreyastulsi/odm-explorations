@@ -26,6 +26,9 @@
       "path": "./apps/mcp-server"
     },
     {
+      "path": "./apps/mcp-dashboard"
+    },
+    {
       "path": "./apps/task-runner"
     }
   ]

@@ -38,6 +38,10 @@ export interface BrowserPageSnapshot {
   url: string;
   text: string;
   headings: string[];
+  links: Array<{
+    text: string;
+    url: string;
+  }>;
 }
 
 function isMissingChromeError(error: unknown): boolean {
@@ -228,12 +232,23 @@ export class BrowserSessionManager {
         .map((element) => element.textContent?.trim() ?? "")
         .filter(Boolean)
         .slice(0, 20);
+      const links = Array.from(document.querySelectorAll("a[href]"))
+        .map((element) => {
+          const anchor = element as HTMLAnchorElement;
+          return {
+            text: anchor.textContent?.trim().replace(/\s+/g, " ") ?? "",
+            url: anchor.href
+          };
+        })
+        .filter((link) => link.url.startsWith("http"))
+        .slice(0, 80);
 
       return {
         title,
         url,
         text,
-        headings
+        headings,
+        links
       };
     }, input.maxChars);
 

@@ -1,0 +1,35 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "composite": true,
+    "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo"
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "references": [
+    {
+      "path": "../../packages/core"
+    },
+    {
+      "path": "../../packages/browser-playwright"
+    },
+    {
+      "path": "../../packages/site-youtube"
+    },
+    {
+      "path": "../../packages/site-pornhub"
+    },
+    {
+      "path": "../../packages/site-instagram"
+    },
+    {
+      "path": "../../packages/site-tiktok"
+    },
+    {
+      "path": "../../packages/desktop-macos"
+    }
+  ]
+}

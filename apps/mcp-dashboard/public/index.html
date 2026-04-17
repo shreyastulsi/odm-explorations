@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MCP Learning Dashboard</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">MCP Server State</p>
+        <h1>Agent Process Dashboard</h1>
+      </div>
+      <div class="topbar-actions">
+        <button id="refreshButton" type="button">Refresh</button>
+        <span id="lastUpdated" class="timestamp">Waiting for state</span>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="Runs">
+        <section class="panel">
+          <div class="section-heading">
+            <p class="eyebrow">Current Run</p>
+            <h2>Runtime</h2>
+          </div>
+          <div id="serverState" class="server-state"></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <p class="eyebrow">History</p>
+            <h2>Runs</h2>
+          </div>
+          <div id="runList" class="run-list"></div>
+        </section>
+      </aside>
+
+      <section class="workspace" aria-label="MCP learning workspace">
+        <section class="prompt-panel">
+          <div>
+            <p class="eyebrow">Start A Run</p>
+            <h2>Ask the dashboard to launch an MCP collection process</h2>
+          </div>
+          <form id="promptForm" class="prompt-form">
+            <label class="sr-only" for="promptInput">MCP run prompt</label>
+            <textarea id="promptInput" rows="3">Run an MCP server process to collect 3 Youtube Shorts, 3 tiktoks, 3 Instagram reels</textarea>
+            <button id="startRunButton" type="submit">Start MCP Run</button>
+          </form>
+          <div id="jobStatus" class="job-status"></div>
+        </section>
+
+        <section class="status-band">
+          <div>
+            <p class="eyebrow">Learning Path</p>
+            <h2>How the agent moves through an MCP task</h2>
+          </div>
+          <div id="processMap" class="process-map"></div>
+        </section>
+
+        <section class="grid two-column">
+          <div class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Selected Run</p>
+              <h2 id="selectedRunTitle">No run selected</h2>
+            </div>
+            <div id="runMetrics" class="metric-grid"></div>
+            <div id="screenshotFrame" class="screenshot-frame"></div>
+          </div>
+
+          <div class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Decision Model</p>
+              <h2>Why the next step happens</h2>
+            </div>
+            <ol class="decision-list">
+              <li>Inputs are checked against each tool schema.</li>
+              <li>The selected tool runs inside the shared run context.</li>
+              <li>The run manager records running, completed, or failed state.</li>
+              <li>The validator checks source discovery and semantic page relevance.</li>
+              <li>The agent searches for a better source when validation fails.</li>
+              <li>Artifacts make the result inspectable and resumable.</li>
+            </ol>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-heading">
+            <p class="eyebrow">Run Timeline</p>
+            <h2>Steps</h2>
+          </div>
+          <div id="stepTimeline" class="timeline"></div>
+        </section>
+
+        <section class="grid two-column">
+          <div class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Outputs</p>
+              <h2>Artifacts</h2>
+            </div>
+            <div id="artifactList" class="artifact-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Inspector</p>
+              <h2 id="artifactTitle">Artifact Preview</h2>
+            </div>
+            <pre id="artifactPreview" class="json-preview">Select an artifact to inspect its stored content.</pre>
+          </div>
+        </section>
+
+        <section class="grid three-column">
+          <div class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Action Surface</p>
+              <h2>Tools</h2>
+            </div>
+            <div id="toolGroups" class="tool-groups"></div>
+          </div>
+
+          <div class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Readable State</p>
+              <h2>Resources</h2>
+            </div>
+            <div id="resourceList" class="primitive-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="section-heading">
+              <p class="eyebrow">Reusable Plans</p>
+              <h2>Prompts</h2>
+            </div>
+            <div id="promptList" class="primitive-list"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
